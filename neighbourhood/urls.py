@@ -1,19 +1,19 @@
-# from django.conf.urls import url
-from django.urls import include, re_path as url
+from django.urls import path
 from . import views
-from django.conf import settings
-from django.conf.urls.static import static
+from django.contrib.auth import views as auth_views
 
-urlpatterns=[
-    url('^$',views.index,name = 'index'),
-    url(r'^new/post$', views.new_post, name='newpost'),
-    url(r'^hoods', views.all_hoods, name='hoods'),
-    url(r'^business/',views.create_business,name = 'business'),
-    url(r'^profile/(?P<user_id>\d+)?$', views.profile, name='profile'),
-    url(r'^createHood/$', views.createHood, name='createHood'),
-    url(r'^update/profile$', views.updateprofile, name='updateprofile'),
-    url(r'^join/(\d+)', views.join, name='joinHood'),
-    url(r'^search/$', views.search, name='search'),
+
+#Create urls here
+urlpatterns = [
+    path('',views.index, name='index'),
+    path('logout/',auth_views.LogoutView.as_view(template_name = 'registration/logout.html')),
+    path('update-profile',views.update_profile, name='update_profile'), 
+    path('profile/<pk>',views.profile, name = 'profile'),
+    path('create-hood',views.createhood, name='createhood'), 
+    path('neighbourhood/<id>',views.neighbourhood, name = 'neighbourhood'),
+    path('post/<hood_id>',views.post, name = 'post'), 
+    path('business/<id>',views.createbusiness, name = 'createbusiness'),
+    path('search/',views.search_results, name='search_results'),
+    path('join_neighbourhood/<id>', views.join_neighbourhood, name='join-neighbourhood'),
+    path('move_neighbourhood/<id>', views.move_neighbourhood, name='move-neighbourhood'),
 ]
-if settings.DEBUG:
-    urlpatterns+=static(settings.MEDIA_URL, document_root = settings.MEDIA_ROOT)
