@@ -26,7 +26,9 @@ LOGIN_REDIRECT_URL='/'
 SECRET_KEY = 'django-insecure-02^o$91g7k)t6wibu@mga+!+3s7hu0c-#6mgzo&y@0&n&7h%n4'
 
 # SECURITY WARNING: don't run with debug turned on in production!
+DEBUG=True
 
+ALLOWED_HOSTS=['adlighthoods.herokuapp.com', '127.0.0.1']
 
 # Application definition
 
@@ -78,41 +80,14 @@ WSGI_APPLICATION = 'hoodwatch.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.postgresql',
-#         'NAME':'space',
-#         'USER':'aakinyi',
-#         'PASSWORD':'Adlight@2022'
-#     }
-# }
-MODE=config("MODE", default="dev")
-SECRET_KEY = config('SECRET_KEY')
-DEBUG = config('DEBUG', default=False, cast=bool)
-if config('MODE')=="dev":
-   DATABASES = {
-       'default': {
-           'ENGINE': 'django.db.backends.postgresql_psycopg2',
-           'NAME': config('DB_NAME'),
-           'USER': config('DB_USER'),
-           'PASSWORD': config('DB_PASSWORD'),
-           'HOST': config('DB_HOST'),
-           'PORT': '',
-       }
-       
-   }
-# production
-else:
-   DATABASES = {
-       'default': dj_database_url.config(
-           default=config('DATABASE_URL')
-       )
-   }
-
-db_from_env = dj_database_url.config(conn_max_age=500)
-DATABASES['default'].update(db_from_env)
-
-ALLOWED_HOSTS = config('ALLOWED_HOSTS', cast=Csv())
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME':'space',
+        'USER':'aakinyi',
+        'PASSWORD':'Adlight@2022'
+    }
+}
 
 cloudinary.config( 
   cloud_name = "dczaq1veb", 
@@ -151,15 +126,21 @@ USE_I18N = True
 USE_TZ = True
 
 
+#Email
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
+LOGIN_REDIRECT_URL = 'index'
+LOGOUT_REDIRECT_URL = 'login'
+# LOGIN_URL = 'sign-in'
+
+
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.0/howto/static-files/
 
 STATIC_URL = 'static/'
+STATIC_ROOT = os.path.join(os.path.dirname(BASE_DIR), "staticfiles")
+STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static'),]
 
-STATIC_URL = '/static/'
-STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, "static"),
-]
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 # Default primary key field type
