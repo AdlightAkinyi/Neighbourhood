@@ -48,7 +48,7 @@ Django
 
 python3
 
-Bootstrap
+Bootstrap3
 
 # Support & Contact details
 adlightakinyi1@gmail.com
