@@ -1,88 +1,150 @@
 from django.db import models
 from django.contrib.auth.models import User
-from django.db.models.signals import post_save,post_delete
-from django.dispatch import receiver
-import datetime as dt
+from cloudinary.models import CloudinaryField
+from tinymce.models import HTMLField
+from django.db.models import Q
 
-@receiver(post_save,sender=User)
-def create_profile(sender, instance,created,**kwargs):
-   if created:
-       Profile.objects.create(user=instance)
-
-@receiver(post_save,sender=User)
-def save_profile(sender, instance,**kwargs):
-   instance.profile.save()
-   
 # Create your models here.
-class Profile(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
-    name = models.CharField(max_length=30, blank=True)
-    user_name = models.CharField(max_length=30,blank=True)
-    prof_pic = models.ImageField(upload_to= 'profiles/', blank=True,default="profile/a.jpg")
-    bio = models.CharField(max_length=800,default="Welcome Me!")
 
-    def post(self, form):
-        image = form.save(commit=False)
-        image.user = self
-        image.save()
-
-
-class Neighbourhood(models.Model):
-    name = models.CharField(max_length = 65)
-    location  = models.CharField(max_length=65)
-    occupants = models.PositiveIntegerField()
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-
-    class Meta:
-        verbose_name_plural = 'Location'
-
-    @classmethod
-    def search_hood(cls, search_term):
-        hoods = cls.objects.filter(name__icontains=search_term)
-        return hoods
-
-
+# NeighbourHood Model
+class NeighbourHood(models.Model):
+    name = models.CharField(max_length=100)
+    location = models.CharField(max_length=100)
+    admin = models.ForeignKey(User,on_delete = models.CASCADE,related_name='administration',null=True)
+    image = CloudinaryField('image')
+    description = models.CharField(max_length=250)
+    occupants = models.IntegerField(default=0, null=True, blank=True)
+    posted_at = models.DateTimeField(auto_now=True)
+    
     def __str__(self):
-        return f"{self.location}"
-
-
-    def save_hood(self):
+        return self.name 
+    
+    def create_neighborhood(self):
+        """
+        A method that creates a neighbourhood
+        """
         self.save()
+        
+    def delete_neighborhood(self):
+        """
+        A method that deletes a neighbourhood
+        """
+        self.delete()    
+        
+    @classmethod
+    def find_neighborhood(cls, neighborhood_id):
+        """
+        A method that finds a neighbourhood using its id
+        """
+        return cls.objects.filter(id=neighborhood_id) 
+    
+    @classmethod
+    def update_neighbourhood(cls, id):
+        """
+        A method that updates a neighbourhood
+        """
+        neighbourhood = cls.objects.filter(id=id).update(id=id)
+        return neighbourhood       
 
-    def delete_hood(self):
-        self.delete()
-class Post(models.Model):
-    title = models.CharField(max_length = 65)
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    hood = models.ForeignKey(Neighbourhood, blank=True)
-    description = models.TextField(max_length=300)
+# Profile Model
     
-    
+class Profile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile')
+    profile_picture = CloudinaryField('image')
+    bio = models.CharField(max_length=250)
+    email =  models.CharField(max_length=60)
+    phone_number = models.IntegerField(blank=True)
+    neighbourhood = models.ForeignKey(NeighbourHood, on_delete=models.SET_NULL, null=True, related_name='neighbour', blank=True)
+    posted_at = models.DateTimeField(auto_now=True)
         
     def __str__(self):
-        return self.description
-
-
+        return self.user    
+  
+# Business Model    
 class Business(models.Model):
-    name = models.CharField(max_length = 65)
-    user = models.ForeignKey(User)
-    hood = models.ForeignKey(Neighbourhood,blank=True)
-    email = models.CharField(max_length=100)
-
-
+    name = models.CharField(max_length=200)
+    image = CloudinaryField('image')
+    user = models.ForeignKey(User, on_delete=models.CASCADE,null=True)     
+    email =  models.CharField(max_length=60)
+    phone_number = models.IntegerField(blank=True)
+    neighbourhood = models.ForeignKey(NeighbourHood,on_delete=models.CASCADE, related_name='business',null=True)
+    posted_at = models.DateTimeField(auto_now=True)
+        
     def __str__(self):
-        return self.name
-
-
-    def save_business(self):
+        return self.name      
+    
+    def create_business(self):
+        """
+        A method that creates a business
+        """
         self.save()
 
     def delete_business(self):
+        """
+        A method that deletes a business
+        """        
         self.delete()
+            
+    @classmethod
+    def search_business(cls,search_term):
+        """
+        A method that searches a business
+        """          
+        businesses = cls.objects.filter(name__icontains = search_term).all()
+        return businesses 
+    
+    @classmethod
+    def find_business(cls, business_id):
+        """
+        A method that finds a business using its id
+        """         
+        business = Business.objects.filter(id=business_id)
+        return business  
+    
+    @classmethod
+    def update_business(cls, id):
+        """
+        A method that updates a business using its id
+        """  
+        business = cls.objects.filter(id=id).update(id=id)
+        return business
+    
 
-class Join(models.Model):
-    user_id = models.OneToOneField(User)
-    hood_id = models.ForeignKey(Neighbourhood)
-
+# Post Model
+class Post(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    title = models.CharField(max_length=200)
+    info =  HTMLField()
+    neighbourhood= models.ForeignKey(NeighbourHood, on_delete=models.CASCADE, related_name='neighbourhood_post')
+    posted_at = models.DateTimeField(auto_now_add=True)
     def __str__(self):
-        return self.user_id
+        return self.title
+         
+    @classmethod
+    def get_post(cls, id):
+        """
+        A method that gets a post using the given id
+        """   
+        post = Post.objects.filter(id=neighbourhood_id)
+        return post     
+    
+# Authority Model 
+class Authority(models.Model):
+    name =models.CharField(max_length=100)
+    email = models.EmailField()
+    contact = models.IntegerField()
+    neighbourhood = models.ForeignKey(NeighbourHood,on_delete=models.CASCADE)
+ 
+    def __str__(self):
+        return self.name      
+    
+# Health Model   
+
+class Health(models.Model):
+    name =models.CharField(max_length=100)
+    email = models.EmailField()
+    contact = models.IntegerField()
+    neighbourhood = models.ForeignKey(NeighbourHood,on_delete=models.CASCADE)
+ 
+    def __str__(self):
+        return self.name  
