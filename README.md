@@ -22,3 +22,6 @@ Create Posts that will be visible to everyone in my neighborhood.
 Change My neighborhood when I decide to move out.
 
 Only view details of a single neighborhood.
+
+# Set-up/Installation requirements
+
