@@ -24,4 +24,18 @@ Change My neighborhood when I decide to move out.
 Only view details of a single neighborhood.
 
 # Set-up/Installation requirements
+git clone 
+
+cd Neighbourhood
+
+python3 -m venv virtual
+
+source virtual/bin/activate
+
+pip install -r requirements
+
+python3 manage.py makemigrations neighbourhood
+
+python3 manage.py migrate
+
 
