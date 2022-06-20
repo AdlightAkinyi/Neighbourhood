@@ -50,6 +50,8 @@ python3
 
 Bootstrap3
 
+heroku
+
 # Support & Contact details
 adlightakinyi1@gmail.com
 
