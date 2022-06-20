@@ -24,7 +24,7 @@ Change My neighborhood when I decide to move out.
 Only view details of a single neighborhood.
 
 # Set-up/Installation requirements
-git clone 
+git clone  https://github.com/AdlightAkinyi/Neighbourhood.git
 
 cd Neighbourhood
 
