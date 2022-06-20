@@ -43,4 +43,11 @@ python3 manage.py runserver
 
 Open the application on your browser 127.0.0.1:8000.
 
+# Technologies used
+Django
+
+python3
+
+Bootstrap
+
 
