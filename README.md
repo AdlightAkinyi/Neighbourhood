@@ -38,4 +38,9 @@ python3 manage.py makemigrations neighbourhood
 
 python3 manage.py migrate
 
+# Running the app
+python3 manage.py runserver
+
+Open the application on your browser 127.0.0.1:8000.
+
 
