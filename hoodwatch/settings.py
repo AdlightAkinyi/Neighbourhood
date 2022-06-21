@@ -26,12 +26,12 @@ LOGIN_REDIRECT_URL='/'
 # See https://docs.djangoproject.com/en/4.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-02^o$91g7k)t6wibu@mga+!+3s7hu0c-#6mgzo&y@0&n&7h%n4'
-
+# SECRET_KEY = 'django-insecure-02^o$91g7k)t6wibu@mga+!+3s7hu0c-#6mgzo&y@0&n&7h%n4'
+SECRET_KEY = config('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG=True
+# DEBUG=True
 
-ALLOWED_HOSTS=['adlight-hoods.herokuapp.com', '127.0.0.1']
+# ALLOWED_HOSTS=['adlight-hoods.herokuapp.com', '127.0.0.1']
 
 # Application definition
 
@@ -94,14 +94,24 @@ WSGI_APPLICATION = 'hoodwatch.wsgi.application'
 #         'PASSWORD':'Adlight@2022',
 #     }
 # }
-DATABASES = {
+ALLOWED_HOSTS = config('ALLOWED_HOSTS', cast=Csv())
+
+if config('MODE') == 'development':
+    DEBUG = True
+    DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
+else:
+    DEBUG = True
+    DATABASES = {
+        'default': dj_database_url.config(default=config('DATABASE_URL')
+            
+        )
+    }
 
-MODE=config("MODE", default="dev")
 
 cloudinary.config( 
   cloud_name = "dczaq1veb", 
@@ -157,6 +167,7 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static'),]
 
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
