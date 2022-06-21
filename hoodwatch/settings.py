@@ -10,10 +10,13 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.0/ref/settings/
 """
 import os
+import dj_database_url
 from pathlib import Path
 import cloudinary
 import cloudinary.uploader
 import cloudinary.api
+from decouple import config,Csv
+import django_heroku
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -98,6 +101,8 @@ DATABASES = {
     }
 }
 
+MODE=config("MODE", default="dev")
+
 cloudinary.config( 
   cloud_name = "dczaq1veb", 
   api_key = "692491277636137", 
@@ -148,7 +153,8 @@ LOGOUT_REDIRECT_URL = 'login'
 
 STATIC_URL = 'static/'
 STATIC_ROOT = os.path.join(os.path.dirname(BASE_DIR), "staticfiles")
-STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static'),]
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'static'),]
 
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
@@ -158,4 +164,4 @@ STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
-# django_heroku.settings(locals())
+django_heroku.settings(locals())
