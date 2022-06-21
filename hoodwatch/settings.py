@@ -118,7 +118,7 @@ cloudinary.config(
   api_key = "692491277636137", 
   api_secret = "WPIIiDhfl4DUE_LYeelMh9AS2YE" ,
 )
-
+DISABLE_COLLECTSTATIC=1
 # Password validation
 # https://docs.djangoproject.com/en/4.0/ref/settings/#auth-password-validators
 
