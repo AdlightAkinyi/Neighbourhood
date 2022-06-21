@@ -28,7 +28,7 @@ SECRET_KEY = 'django-insecure-02^o$91g7k)t6wibu@mga+!+3s7hu0c-#6mgzo&y@0&n&7h%n4
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG=True
 
-ALLOWED_HOSTS=['adlighthoods.herokuapp.com', '127.0.0.1']
+ALLOWED_HOSTS=['adlight-hoods.herokuapp.com', '127.0.0.1']
 
 # Application definition
 
@@ -46,8 +46,11 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
-    'whitenoise.middleware.WhiteNoiseMiddleware',
+    
     'django.middleware.security.SecurityMiddleware',
+
+    'whitenoise.middleware.WhiteNoiseMiddleware',
+
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -92,7 +95,7 @@ DATABASES = {
 cloudinary.config( 
   cloud_name = "dczaq1veb", 
   api_key = "692491277636137", 
-  api_secret = "WPIIiDhfl4DUE_LYeelMh9AS2YE" 
+  api_secret = "WPIIiDhfl4DUE_LYeelMh9AS2YE" ,
 )
 
 # Password validation
