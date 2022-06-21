@@ -26,12 +26,12 @@ LOGIN_REDIRECT_URL='/'
 # See https://docs.djangoproject.com/en/4.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-# SECRET_KEY = 'django-insecure-02^o$91g7k)t6wibu@mga+!+3s7hu0c-#6mgzo&y@0&n&7h%n4'
-SECRET_KEY = config('SECRET_KEY')
+SECRET_KEY = 'django-insecure-02^o$91g7k)t6wibu@mga+!+3s7hu0c-#6mgzo&y@0&n&7h%n4'
+# SECRET_KEY = config('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
-# DEBUG=True
+DEBUG=True
 
-# ALLOWED_HOSTS=['adlight-hoods.herokuapp.com', '127.0.0.1']
+ALLOWED_HOSTS=['adlight-hoods.herokuapp.com', '127.0.0.1']
 
 # Application definition
 
@@ -94,23 +94,23 @@ WSGI_APPLICATION = 'hoodwatch.wsgi.application'
 #         'PASSWORD':'Adlight@2022',
 #     }
 # }
-ALLOWED_HOSTS = config('ALLOWED_HOSTS', cast=Csv())
+# ALLOWED_HOSTS = config('ALLOWED_HOSTS', cast=Csv())
 
-if config('MODE') == 'development':
-    DEBUG = True
-    DATABASES = {
+# if config('MODE') == 'development':
+#     DEBUG = True
+DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
-else:
-    DEBUG = True
-    DATABASES = {
-        'default': dj_database_url.config(default=config('DATABASE_URL')
+# else:
+#     DEBUG = True
+#     DATABASES = {
+#         'default': dj_database_url.config(default=config('DATABASE_URL')
             
-        )
-    }
+#         )
+#     }
 
 
 cloudinary.config( 
@@ -118,7 +118,7 @@ cloudinary.config(
   api_key = "692491277636137", 
   api_secret = "WPIIiDhfl4DUE_LYeelMh9AS2YE" ,
 )
-DISABLE_COLLECTSTATIC=1
+# DISABLE_COLLECTSTATIC=1
 # Password validation
 # https://docs.djangoproject.com/en/4.0/ref/settings/#auth-password-validators
 
